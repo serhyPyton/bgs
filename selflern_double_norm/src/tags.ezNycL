@@ -1,0 +1,8 @@
+main	opencv-grayscale.cpp	/^int main(int argc, char *argv[])$/;"	f	typeref:typename:int
+write_files	learn.cpp	/^ void write_files(vector<vector<vector<double>>>& disp, vector<vector<vector<double>>>& mean, ve/;"	f	typeref:typename:void
+write_mean	learn.cpp	/^ void write_mean(int rows, int cols, int k, const vector<vector<vector<double>>>& mean, const ve/;"	f	typeref:typename:void
+learn	learn.cpp	/^void learn(vector<vector<vector<short int>>>& pic, vector<vector<vector<double>>>& disp, vector</;"	f	typeref:typename:void
+get_gray_pics	stuff.cpp	/^int get_gray_pics( vector<vector<vector<short int>>>& pic, char* file){$/;"	f	typeref:typename:int
+write_video	write_to_file.cpp	/^void write_video(const vector<vector<vector<double>>>& disp, const vector<vector<vector<short in/;"	f	typeref:typename:void
+cut_video	write_to_file.cpp	/^void cut_video(char* file){$/;"	f	typeref:typename:void
+gen_backgr	write_to_file.cpp	/^int gen_backgr(const vector<vector<vector<double>>>& mean, const vector<vector<vector<double>>>&/;"	f	typeref:typename:int

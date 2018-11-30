@@ -1,0 +1,3 @@
+/home/pyton/sources/diplom/selflern_double_norm/CMakeFiles/rebuild_cache.dir
+/home/pyton/sources/diplom/selflern_double_norm/CMakeFiles/opencv-grayscale.dir
+/home/pyton/sources/diplom/selflern_double_norm/CMakeFiles/edit_cache.dir
