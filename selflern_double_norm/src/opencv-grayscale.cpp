@@ -32,24 +32,29 @@ int main(int argc, char *argv[])
     int rows=frame.rows;
     int cols=frame.cols;
 
+//rows=10;
+//cols=10;
+//frames=300;
+
     vector<vector<vector<double>>>      mean    (rows, vector<vector<double>>(cols, vector<double>(2)));
     vector<vector<vector<double>>>      disp    (rows, vector<vector<double>>(cols, vector<double>(2)));
     vector<vector<double>>              appr    (rows, vector<double>(cols));
-    vector<vector<vector<short int>>>   pic     (frames, vector<vector<short int>>(rows, vector<short int>(cols)));
+    vector<vector<vector<short int>>>   pic     (rows, vector<vector<short int>>(cols, vector<short int>(frames)));
     vector<vector<vector<double>>>      alfa    (rows, vector<vector<double>>(cols, vector<double>(frames)));
-
+    vector<vector<int>>                 clas    (rows, vector<int>(cols));
+//test(pic, 40, 3, 200, 80, 5, 100);
     get_gray_pics(pic, argv[1]);
   //  cut_video(argv[1]);
 
-    thread t1(learn, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), rows, cols, frames, 9, 1, 2);
-    thread t2(learn, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), rows, cols, frames, 9, 2, 2);
+    thread t1(learn, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), ref(clas), rows, cols, frames, 9, 1, 2);
+    thread t2(learn, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), ref(clas), rows, cols, frames, 9, 2, 2);
   //  thread t3(learn, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), rows, cols, frames, 9, 3, 4);
   //  thread t4(learn, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), rows, cols, frames, 9, 4, 4);
     t1.join();
     t2.join();
 
-
-    write_video(disp, pic, alfa, frame, frames);
+write_test(pic, disp, mean, rows, cols);
+    write_video(disp, pic, alfa, clas, frame, frames);
 
     gen_backgr(mean, disp, appr, rows, cols);
 

@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/pyton/sources/diplom/selflern_double_norm/src/opencv-grayscale.cpp" "/home/pyton/sources/diplom/selflern_double_norm/CMakeFiles/opencv-grayscale.dir/src/opencv-grayscale.cpp.o"
+  "/home/pyton/sources/diplom/bgs/selflern_double_norm/src/opencv-grayscale.cpp" "/home/pyton/sources/diplom/bgs/selflern_double_norm/CMakeFiles/opencv-grayscale.dir/src/opencv-grayscale.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

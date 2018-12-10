@@ -1,4 +1,4 @@
-# Install script for directory: /home/pyton/sources/diplom/selflern_double_norm
+# Install script for directory: /home/pyton/sources/diplom/bgs/selflern_double_norm
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/pyton/sources/diplom/selflern_double_norm/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/pyton/sources/diplom/bgs/selflern_double_norm/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
