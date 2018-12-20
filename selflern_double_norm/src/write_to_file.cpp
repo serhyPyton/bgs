@@ -51,13 +51,17 @@ void write_video(const vector<vector<vector<double>>>& disp, const vector<vector
 
 
 
-int gen_backgr(const vector<vector<vector<double>>>& mean, const vector<vector<vector<double>>>& disp, vector<vector<double>>& appr, int rows, int cols){
+Mat gen_backgr(const vector<vector<vector<double>>>& mean, const vector<vector<vector<double>>>& disp, vector<vector<double>>& appr, int rows, int cols){
     Mat img(rows,cols,false);
     for (int j=0;j<rows;j++)
         for (int i=0;i<cols;i++)
+            if (appr[j][i]>0.5)
             img.at<uchar>(j,i)=mean[j][i][0];
+            else
+            img.at<uchar>(j,i)=mean[j][i][1];
     imwrite("mean_0.jpg", img);
-    for (int j=0;j<rows;j++)
+    return img;
+ /*   for (int j=0;j<rows;j++)
         for (int i=0;i<cols;i++)
             img.at<uchar>(j,i)=mean[j][i][1];
     imwrite("mean_1.jpg", img);
@@ -72,8 +76,27 @@ int gen_backgr(const vector<vector<vector<double>>>& mean, const vector<vector<v
              if (disp[j][i][0]>disp[j][i][1]) img.at<uchar>(j,i)=mean[j][i][0];
              else img.at<uchar>(j,i)=mean[j][i][1];
             }
-    imwrite("mean_with_disp_1.jpg", img);
+    imwrite("mean_with_disp_1.jpg", img);*/
 
-    return 0;
+}
+
+void gen_obj(const vector<vector<vector<short int>>>& pic, const Mat backgr){
+    int rows = pic.size();
+    int cols = pic[0].size();
+    int len  = pic[0][0].size();
+    Mat img(rows,cols,false);
+    Size frameSize(static_cast<int>(cols), static_cast<int>(rows));
+    VideoWriter oVideoWriter2 ("obj.avi", CV_FOURCC('P','I','M','1'), 20, frameSize, false); //initialize the VideoWriter object
+    for (int w=0;w<len;w++){
+        for (int j=0;j<rows;j++){
+            for (int i=0;i<cols;i++){
+                if (abs(pic[j][i][w]-(int)backgr.at<uchar>(j,i))>w%30)
+                   img.at<uchar>(j,i)=pic[j][i][w];
+                else
+                   img.at<uchar>(j,i)=0;
+            }
+        }
+        oVideoWriter2.write(img);
+    }
 }
 

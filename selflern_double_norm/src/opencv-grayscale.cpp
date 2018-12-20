@@ -18,6 +18,7 @@ using namespace cv;
 
 int main(int argc, char *argv[])
 {
+
     cout<< "using video: "<<argv[1]<<endl;
 
     VideoCapture cap(argv[1]); // open video file
@@ -26,15 +27,11 @@ int main(int argc, char *argv[])
         return -1;}
     Mat frame;
     cap >> frame; // get a new frame from camera
-    int frames = cap.get(CV_CAP_PROP_FRAME_COUNT);
+    int frames = cap.get(CV_CAP_PROP_FRAME_COUNT); //get a number of frames
     cout<< "frames: "<< frames<<endl;
 
     int rows=frame.rows;
     int cols=frame.cols;
-
-//rows=10;
-//cols=10;
-//frames=300;
 
     vector<vector<vector<double>>>      mean    (rows, vector<vector<double>>(cols, vector<double>(2)));
     vector<vector<vector<double>>>      disp    (rows, vector<vector<double>>(cols, vector<double>(2)));
@@ -42,22 +39,22 @@ int main(int argc, char *argv[])
     vector<vector<vector<short int>>>   pic     (rows, vector<vector<short int>>(cols, vector<short int>(frames)));
     vector<vector<vector<double>>>      alfa    (rows, vector<vector<double>>(cols, vector<double>(frames)));
     vector<vector<int>>                 clas    (rows, vector<int>(cols));
-//test(pic, 40, 3, 200, 80, 5, 100);
-    get_gray_pics(pic, argv[1]);
-  //  cut_video(argv[1]);
 
-    thread t1(learn, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), ref(clas), rows, cols, frames, 9, 1, 2);
-    thread t2(learn, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), ref(clas), rows, cols, frames, 9, 2, 2);
-  //  thread t3(learn, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), rows, cols, frames, 9, 3, 4);
-  //  thread t4(learn, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), rows, cols, frames, 9, 4, 4);
+    //test(pic, 40, 3, 200, 80, 5, 100);
+    get_gray_pics(pic, argv[1]);
+    //  cut_video(argv[1]);
+
+    //classify(pic,disp,mean,alfa,appr,rows,cols,frames,q,w,n_t);
+    thread t1(classify, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), 9, 1, 2);
+    thread t2(classify, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), 9, 2, 2);
     t1.join();
     t2.join();
 
-write_test(pic, disp, mean, rows, cols);
+    write_test(pic, disp, mean, rows, cols);
     write_video(disp, pic, alfa, clas, frame, frames);
-
-    gen_backgr(mean, disp, appr, rows, cols);
-
+    Mat backgr;
+    backgr = gen_backgr(mean, disp, appr, rows, cols);
+    gen_obj(pic,backgr);
     return 0;
 //1.23
 //0.42
