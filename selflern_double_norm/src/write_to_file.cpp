@@ -51,14 +51,19 @@ void write_video(const vector<vector<vector<double>>>& disp, const vector<vector
 
 
 
-Mat gen_backgr(const vector<vector<vector<double>>>& mean, const vector<vector<vector<double>>>& disp, vector<vector<double>>& appr, int rows, int cols){
+Mat gen_backgr(vector<vector<vector<double>>>& mean, const vector<vector<vector<double>>>& disp, vector<vector<double>>& appr, int rows, int cols){
     Mat img(rows,cols,false);
     for (int j=0;j<rows;j++)
         for (int i=0;i<cols;i++)
             if (appr[j][i]>0.5)
             img.at<uchar>(j,i)=mean[j][i][0];
-            else
+            else{
             img.at<uchar>(j,i)=mean[j][i][1];
+            int b = mean[j][i][0];
+            mean[j][i][0] = mean[j][i][1];
+            mean[j][i][1] = b;
+            }
+
     imwrite("mean_0.jpg", img);
     return img;
  /*   for (int j=0;j<rows;j++)

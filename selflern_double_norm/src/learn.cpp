@@ -126,9 +126,9 @@ void learn(vector<short int>& pic, vector<double>& disp, vector<double>& mean, v
             if (disp[1]==0)
                 disp[1]=0.00000001;
 
-
-
 }
+
+
 void classify(vector<vector<vector<short int>>>& pic, vector<vector<vector<double>>>& disp, vector<vector<vector<double>>>& mean, vector<vector<vector<double>>>& alfa, vector<vector<double>>& appr, int iter, int thread, int n_t){
     int rows = pic.size();
     int cols = pic[0].size();
