@@ -45,16 +45,16 @@ int main(int argc, char *argv[])
     //  cut_video(argv[1]);
 
     //classify(pic,disp,mean,alfa,appr,rows,cols,frames,q,w,n_t);
-    thread t1(classify, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), 9, 1, 2);
-    thread t2(classify, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), 9, 2, 2);
+    thread t1(classify, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), 4, 1, 2);
+    thread t2(classify, ref(pic), ref(disp), ref(mean), ref(alfa), ref(appr), 4, 2, 2);
     t1.join();
     t2.join();
 
-    write_test(pic, disp, mean, rows, cols);
-    write_video(disp, pic, alfa, clas, frame, frames);
     Mat backgr;
-    backgr = gen_backgr(mean, disp, appr, rows, cols);
+    backgr = gen_backgr(mean, disp, appr, rows, cols, alfa);
     gen_obj(pic,backgr);
+    write_test(appr, disp, mean, rows, cols);
+    write_video(disp, pic, alfa, frame, frames);
     return 0;
 //1.23
 //0.42

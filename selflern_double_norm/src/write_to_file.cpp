@@ -9,7 +9,7 @@
 using namespace cv;
 using namespace std;
 
-void write_video(const vector<vector<vector<double>>>& disp, const vector<vector<vector<short int>>>& pic, const vector<vector<vector<double>>>& alfa, const vector<vector<int>>& clas, Mat& frame, int frames){
+void write_video(const vector<vector<vector<double>>>& disp, const vector<vector<vector<short int>>>& pic, const vector<vector<vector<double>>>& alfa, Mat& frame, int frames){
    double cols = frame.cols; //get the width of frames of the video
    double rows = frame.rows; //get the height of frames of the video
 
@@ -32,10 +32,10 @@ void write_video(const vector<vector<vector<double>>>& disp, const vector<vector
     for (int w=0;w<frames;w++){
             for (int j=0;j<rows;j++){
                 for (int i=0;i<cols;i++){
-                    if ((alfa[j][i][w]>=0.5 /*&& clas[j][i]>0) || (alfa[j][i][w]<=0.5 && clas[j][i]<0*/))
-                        backgr_img.at<uchar>(j,i)=0;
-                    else
-                        backgr_img.at<uchar>(j,i)=255;//(int)255*(alfa[j][i][w]);
+                    if (alfa[j][i][w]>0.7){
+                        backgr_img.at<uchar>(j,i)=255;}
+                    else{
+                        backgr_img.at<uchar>(j,i)=0;}//(int)255*(alfa[j][i][w]);
                     /*
                     if (alfa[j][i][w]<0.5)
                         backgr_img.at<uchar>(j,i)=0;
@@ -51,7 +51,7 @@ void write_video(const vector<vector<vector<double>>>& disp, const vector<vector
 
 
 
-Mat gen_backgr(vector<vector<vector<double>>>& mean, const vector<vector<vector<double>>>& disp, vector<vector<double>>& appr, int rows, int cols){
+Mat gen_backgr(vector<vector<vector<double>>>& mean, vector<vector<vector<double>>>& disp, vector<vector<double>>& appr, int rows, int cols, vector<vector<vector<double>>>& alfa){
     Mat img(rows,cols,false);
     for (int j=0;j<rows;j++)
         for (int i=0;i<cols;i++)
@@ -59,9 +59,13 @@ Mat gen_backgr(vector<vector<vector<double>>>& mean, const vector<vector<vector<
             img.at<uchar>(j,i)=mean[j][i][0];
             else{
             img.at<uchar>(j,i)=mean[j][i][1];
-            int b = mean[j][i][0];
+            double b = mean[j][i][0];
             mean[j][i][0] = mean[j][i][1];
             mean[j][i][1] = b;
+            b = disp[j][i][0];
+            disp[j][i][0] = disp[j][i][1];
+            disp[j][i][1] = b;
+            appr[j][i]=1-appr[j][i];
             }
 
     imwrite("mean_0.jpg", img);

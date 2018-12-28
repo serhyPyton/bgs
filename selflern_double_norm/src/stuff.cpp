@@ -69,13 +69,13 @@ void test(vector<vector<vector<short int>>>& pic, double mean1, double disp1, in
         }
 }
 
-void write_test(vector<vector<vector<short int>>>& pic, vector<vector<vector<double>>>& disp, vector<vector<vector<double>>>& mean, int rows, int cols){
+void write_test(vector<vector<double>>& appr, vector<vector<vector<double>>>& disp, vector<vector<vector<double>>>& mean, int rows, int cols){
     ofstream file;
     file.open("result.txt");
     for (int j=0;j<rows;j++){
         for (int i=0; i<cols;i++){
-            file << mean[j][i][1]<<";"<<disp[j][i][1]<<";1"<<endl;
-            file << mean[j][i][0]<<";"<<disp[j][i][0]<<";0"<<endl;
+            file << appr[j][i]<<";"<<disp[j][i][0]<<";"<<mean[j][i][0]<<";0"<<endl;
+            file << 1-appr[j][i]<<";"<<disp[j][i][1]<<";"<<mean[j][i][1]<<";1"<<endl;
         }
     }
   /*  file <<"pic"<<endl;
