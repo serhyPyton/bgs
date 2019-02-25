@@ -130,6 +130,7 @@ void learn(vector<short int>& pic, vector<double>& disp, vector<double>& mean, v
 
 
 void classify(vector<vector<vector<short int>>>& pic, vector<vector<vector<double>>>& disp, vector<vector<vector<double>>>& mean, vector<vector<vector<double>>>& alfa, vector<vector<double>>& appr, int iter, int thread, int n_t){
+cout<<"memmory alloc"<<endl;
     int rows = pic.size();
     int cols = pic[0].size();
     int st_row=(thread-1)*rows/n_t;

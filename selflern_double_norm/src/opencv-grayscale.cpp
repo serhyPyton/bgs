@@ -39,8 +39,6 @@ int main(int argc, char *argv[])
     vector<vector<vector<short int>>>   pic     (rows, vector<vector<short int>>(cols, vector<short int>(frames)));
     vector<vector<vector<double>>>      alfa    (rows, vector<vector<double>>(cols, vector<double>(frames)));
     vector<vector<int>>                 clas    (rows, vector<int>(cols));
-
-    //test(pic, 40, 3, 200, 80, 5, 100);
     get_gray_pics(pic, argv[1]);
     //  cut_video(argv[1]);
 
@@ -52,9 +50,11 @@ int main(int argc, char *argv[])
 
     Mat backgr;
     backgr = gen_backgr(mean, disp, appr, rows, cols, alfa);
-    gen_obj(pic,backgr);
+
+  //  gen_obj2(disp, alfa, pic);
+  gen_obj(pic, backgr);
     write_test(appr, disp, mean, rows, cols);
-    write_video(disp, pic, alfa, frame, frames);
+  //  write_video(disp, pic, alfa, frame, frames);
     return 0;
 //1.23
 //0.42

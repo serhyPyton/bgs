@@ -32,7 +32,7 @@ void write_video(const vector<vector<vector<double>>>& disp, const vector<vector
     for (int w=0;w<frames;w++){
             for (int j=0;j<rows;j++){
                 for (int i=0;i<cols;i++){
-                    if (alfa[j][i][w]>0.7){
+                    if ((abs(alfa[j][i][w]-0.5)>0.3)&&disp[j][i][0]>2){
                         backgr_img.at<uchar>(j,i)=255;}
                     else{
                         backgr_img.at<uchar>(j,i)=0;}//(int)255*(alfa[j][i][w]);
@@ -53,22 +53,54 @@ void write_video(const vector<vector<vector<double>>>& disp, const vector<vector
 
 Mat gen_backgr(vector<vector<vector<double>>>& mean, vector<vector<vector<double>>>& disp, vector<vector<double>>& appr, int rows, int cols, vector<vector<vector<double>>>& alfa){
     Mat img(rows,cols,false);
-    for (int j=0;j<rows;j++)
-        for (int i=0;i<cols;i++)
-            if (appr[j][i]>0.5)
-            img.at<uchar>(j,i)=mean[j][i][0];
+    for (int j=0;j<rows;j++){
+        for (int i=0;i<cols;i++){
+            if (appr[j][i]>0.5){
+            img.at<uchar>(j,i)=mean[j][i][0];}
             else{
             img.at<uchar>(j,i)=mean[j][i][1];
-            double b = mean[j][i][0];
-            mean[j][i][0] = mean[j][i][1];
-            mean[j][i][1] = b;
-            b = disp[j][i][0];
-            disp[j][i][0] = disp[j][i][1];
-            disp[j][i][1] = b;
-            appr[j][i]=1-appr[j][i];
             }
+        }
+    }
 
     imwrite("mean_0.jpg", img);
+    Mat imgrgb(rows,cols,CV_8SC3);
+    double max=0;
+    for (int j=0;j<rows;j++){
+        for (int i=0;i<cols;i++){
+        if (disp[j][i][0]>max)max=disp[j][i][0];}}
+    for (int j=0;j<rows;j++){
+        for (int i=0;i<cols;i++){
+        imgrgb.at<Vec3b>(j,i)[2]= mean[j][i][0];
+        imgrgb.at<Vec3b>(j,i)[1]= (disp[j][i][0]/max)*255;
+        imgrgb.at<Vec3b>(j,i)[0]= 0;
+        }}
+    imwrite("mean_00.jpg", imgrgb);
+    for (int j=0;j<rows;j++){
+        for (int i=0;i<cols;i++){
+        imgrgb.at<Vec3b>(j,i)[2]= mean[j][i][0];
+        imgrgb.at<Vec3b>(j,i)[1]= (disp[j][i][1]/max)*255;
+        imgrgb.at<Vec3b>(j,i)[0]= 0;
+        }}
+    imwrite("mean_01.jpg", imgrgb);
+    for (int j=0;j<rows;j++){
+        for (int i=0;i<cols;i++){
+            if (disp[j][i][0]<disp[j][i][1])
+                if (disp[j][i][0]>0.5)
+                    img.at<uchar>(j,i)=mean[j][i][0];
+                else
+                    img.at<uchar>(j,i)=mean[j][i][1];
+            if (disp[j][i][1]<disp[j][i][0])
+                if (disp[j][i][1]>0.5)
+                    img.at<uchar>(j,i)=mean[j][i][1];
+                else
+                    img.at<uchar>(j,i)=mean[j][i][0];
+        }}
+    imwrite("mean.jpg", img);
+    for (int j=0;j<rows;j++){
+        for (int i=0;i<cols;i++){
+        img.at<uchar>(j,i)=mean[j][i][1];}}
+    imwrite("mean_11.jpg", img);
     return img;
  /*   for (int j=0;j<rows;j++)
         for (int i=0;i<cols;i++)
@@ -90,6 +122,7 @@ Mat gen_backgr(vector<vector<vector<double>>>& mean, vector<vector<vector<double
 }
 
 void gen_obj(const vector<vector<vector<short int>>>& pic, const Mat backgr){
+//gen video of object. background - source image >? n
     int rows = pic.size();
     int cols = pic[0].size();
     int len  = pic[0][0].size();
@@ -109,3 +142,27 @@ void gen_obj(const vector<vector<vector<short int>>>& pic, const Mat backgr){
     }
 }
 
+void gen_obj2(vector<vector<vector<double>>>& disp, vector<vector<vector<double>>>& alfa, const vector<vector<vector<short int>>>& pic){
+    int rows = pic.size();
+    int cols = pic[0].size();
+    int len  = pic[0][0].size();
+    Mat img(rows,cols,false);
+    Size frameSize(static_cast<int>(cols), static_cast<int>(rows));
+    VideoWriter oVideoWriter2 ("obj.avi", CV_FOURCC('P','I','M','1'), 20, frameSize, false); //initialize the VideoWriter object
+    for (int w=0;w<len;w++){
+        for (int j=0;j<rows;j++){
+            for (int i=0;i<cols;i++){
+                if(disp[j][i][0]-disp[j][i][1]>1){
+                int k=0;
+                    if (disp[j][i][0]>disp[j][i][1]) k=1;
+                if (abs(k-alfa[j][i][w])>0.5)
+                    img.at<uchar>(j,i)=pic[j][i][w];
+                else
+                    img.at<uchar>(j,i)=0;
+                }
+                else img.at<uchar>(j,i)=0;
+            }
+        }
+        oVideoWriter2.write(img);
+    }
+}
